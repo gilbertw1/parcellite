@@ -161,7 +161,14 @@ struct cmdline_opts *parse_options(int argc, char* argv[])
       "clipboard", 'c',
       0,
       G_OPTION_ARG_NONE,
-      &opts->clipboard, _("Print clipboard contents"),
+      &opts->clipboard, _("Print current clipboard entry"),
+      NULL
+    },
+    {
+      "clipboard", 'l',
+      0,
+      G_OPTION_ARG_NONE,
+      &opts->list, _("Print all clipboard entries"),
       NULL
     },
     {

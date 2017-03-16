@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 struct cmdline_opts {
 	gboolean icon;    
 	gboolean clipboard;
+	gboolean list;
 	gboolean primary;
 	gboolean exit;
 	gboolean version;

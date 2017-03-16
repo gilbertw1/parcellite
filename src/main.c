@@ -2234,6 +2234,7 @@ static void parcellite_init()
 	if(FALSE ==g_thread_supported()){
 		g_fprintf(stderr,"g_thread not init!\n");
 	}
+
 	hist_lock= g_mutex_new();
   
   show_icon=!get_pref_int32("no_icon");
@@ -2353,8 +2354,8 @@ int main(int argc, char *argv[])
 		mode=PROG_MODE_DAEMON; /**first instance  */
 	else
 		mode=PROG_MODE_CLIENT; /**already running, just access fifos & exit.  */
-	
-	/**get options/cmd line not parsed.  */
+
+  /**get options/cmd line not parsed.  */
 	if( NULL != opts->leftovers)g_print("%s\n",opts->leftovers);
 	/**init fifo should set up the fifo and the callback (if we are daemon mode)  */
 		if(opts->primary)	{
@@ -2397,6 +2398,17 @@ int main(int argc, char *argv[])
 	    if (clip_text)
 	      g_print("%s", clip_text);
 	    g_free(clip_text);
+	  }  else if(opts->list){
+	    /* Print all clipboard contents (if any) */
+      GList *l;
+      hist_lock= g_mutex_new();
+      read_history();
+      for (l = history_list; l != NULL; l = l->next) {
+        gchar* clip_text = ((struct history_item *)l->data)->text;
+        if (clip_text) {
+          g_print("----------\n%s\n", clip_text);
+        }
+      }
 	  }  else  	{ /*use CLIPBOARD*/
 			GtkClipboard* clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 			if(NULL == (fifo=init_fifo(FIFO_MODE_NONE|mode))) return 1;
